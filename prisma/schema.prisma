@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  member
+  admin
+}
+
+model User {
+  id                 String         @id @default(auto()) @map("_id") @db.ObjectId
+  user_email         String         @unique
+  user_password      String
+  user_nama          String
+  user_avatar        String
+  user_refresh_token String
+  user_balance       Float          @default(0)
+  user_role          Role           @default(member)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  deletedAt          DateTime?
+  user_transaction   Transaction[]
+  user_notification  Notification[]
+  user_chat          Chat[]
+}
+
+model Chat {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  role      ChatRole
+  message   String
+  imageUrl  String?
+  isImage   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ChatRole {
+  user
+  ai
+}
+
+type Notification {
+  notification_date    DateTime
+  notification_message DateTime
+}
+
+type Transaction {
+  trans_recipe String
+  trans_date   DateTime
+  trans_total  Int
+  trans_detail DTransaction[]
+}
+
+type DTransaction {
+  detail_name  String
+  detail_price Int
+}
+
+model todolist {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  todolist_desc   String
+  todolist_status String
+  todolist_worker String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+}
+
+model Post {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  post_title      String
+  post_author     String
+  post_short_desc String
+  post_long_desc  String
+  post_banner     String?
+  post_view       BigInt    @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+}
+
+model Forum {
+  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  forum_title     String
+  forum_desc      String
+  forum_img       String?
+  forum_like      Int          @default(0)
+  forum_publisher String
+  forum_reply     ForumReply[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  deletedAt       DateTime?
+}
+
+type ForumReply {
+  username String
+  date     DateTime
+  reply    String
+  replies  ForumReply[]
+}
