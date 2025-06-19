@@ -80,7 +80,7 @@ model Post {
   post_short_desc String
   post_long_desc  String
   post_banner     String?
-  post_view       BigInt    @default(0)
+  post_view       Int       @default(0)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   deletedAt       DateTime?
