@@ -30,6 +30,7 @@ const addPost = async (req, res) => {
         post_short_desc,
         post_long_desc,
         post_banner: url,
+        deletedAt: null,
       },
     });
 
@@ -141,14 +142,14 @@ const getPosts = async (req, res) => {
     let result;
     if (view) {
       result = await prisma.post.findMany({
-        where: { post_view: view, deletedAt: null },
+        where: { post_view: parseInt(view), deletedAt: null },
       });
     } else {
       result = await prisma.post.findMany({ where: { deletedAt: null } });
     }
 
     if (result.length <= 0) {
-      return res.status(404).json({ message: "The posts in not found" });
+      return res.status(404).json({ message: "The posts are not found" });
     }
     return res
       .status(200)
@@ -189,7 +190,7 @@ const getPostNewest = async (req, res) => {
       orderBy: { createdAt: "desc" },
     });
     if (result.length <= 0) {
-      return res.status(404).json({ message: "posts are not found" });
+      return res.status(404).json({ message: "posts newest are not found" });
     }
     return res
       .status(200)

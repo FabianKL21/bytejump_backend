@@ -6,7 +6,6 @@ const {
   updateView,
   getPosts,
   getPostsByTitle,
-  getPostByView,
   getPostNewest,
 } = require("../controllers/post");
 const upload = require("../middlewares/upload");
