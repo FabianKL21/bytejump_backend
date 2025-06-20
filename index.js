@@ -3,6 +3,13 @@ const { articlesRouter, chatBotRouter, postRouter } = require("./src/routes");
 const cookieParser = require("cookie-parser");
 const app = express();
 const port = 3000;
+const cors = require("cors");
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://bytejump.vercel.app"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("dotenv").config();
