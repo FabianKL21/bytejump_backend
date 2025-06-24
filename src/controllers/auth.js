@@ -96,10 +96,19 @@ const login = async (req, res) => {
         data: { user_refresh_token: refreshToken },
       });
 
+      //ini kode mu :
+      // res.cookie("refreshToken", refreshToken, {
+      //   httpOnly: true,
+      //   maxAge: 24 * 60 * 60 * 1000,
+      // });
+
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
+        secure: true, // WAJIB untuk cross-origin di production (Railway pakai HTTPS)
+        sameSite: "none", // WAJIB agar cookie dikirim cross-origin
+        maxAge: 24 * 60 * 60 * 1000
       });
+
 
       return res
         .status(200)
