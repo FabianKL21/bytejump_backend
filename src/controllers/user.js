@@ -1,4 +1,5 @@
 const prisma = require("../../prisma/prisma");
+const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { uploadFile } = require("../utils/googleDrive");
 const GOOGLE_DRIVE_FOLDER_ID = process.env.GDRIVEKEY;
@@ -15,11 +16,15 @@ const updatePersonalData = async (req, res) => {
       return res.status(401).json({ message: "not Login" });
     }
 
+    let hashPassword;
+    if (user_password) {
+      hashPassword = await bcryptjs.hash(user_password, 10);
+    }
     const result = await prisma.user.update({
       where: { id: user.id },
       data: {
         user_email: user_email || user.user_email,
-        user_password: user_password || user.user_password,
+        user_password: hashPassword || user.user_password,
         user_nama: user_nama || user_nama,
       },
       select: {
@@ -114,10 +119,16 @@ const updateProfpic = async (req, res) => {
       result: { data: result, accessToken: accessToken },
     });
   } catch (error) {
-    console.log(error);
-
     return res.status(500).json({ message: "Failed update profile picture" });
   }
 };
 
-module.exports = { updatePersonalData, updateProfpic };
+const topup = async (req, res) => {
+  try {
+    return res.status(200).json({ message: "hahaha" });
+  } catch (error) {
+    return res.status(500).json({ message: "hahahaha" });
+  }
+};
+
+module.exports = { updatePersonalData, updateProfpic, topup };

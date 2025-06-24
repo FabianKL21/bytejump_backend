@@ -108,7 +108,9 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Failed to login" });
     }
   } catch (error) {
-    return res.status(400).json({ message: "Login Failed" });
+    console.log(error);
+
+    return res.status(500).json({ message: "Login Failed" });
   }
 };
 const refreshToken = async (req, res) => {
