@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const port = 3000;
 const cors = require("cors");
+app.use(cookieParser());
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://bytejump.vercel.app"],
@@ -20,7 +21,6 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("dotenv").config();
-app.use(cookieParser());
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/chatbot", chatBotRouter);

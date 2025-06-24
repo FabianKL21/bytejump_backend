@@ -102,11 +102,20 @@ const login = async (req, res) => {
       //   maxAge: 24 * 60 * 60 * 1000,
       // });
 
+      //setel ini pas production
+      // res.cookie("refreshToken", refreshToken, {
+      //   httpOnly: true,
+      //   secure: true, // WAJIB untuk cross-origin di production (Railway pakai HTTPS)
+      //   sameSite: "none", // WAJIB agar cookie dikirim cross-origin
+      //   maxAge: 24 * 60 * 60 * 1000
+      // });
+
+      //setel ini pas localan
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: true, // WAJIB untuk cross-origin di production (Railway pakai HTTPS)
-        sameSite: "none", // WAJIB agar cookie dikirim cross-origin
-        maxAge: 24 * 60 * 60 * 1000
+        secure: false,        // JANGAN true dulu, karena http://localhost akan gagal
+        sameSite: "lax",      //  "lax" cukup untuk localhost & masih oke di deploy
+        maxAge: 24 * 60 * 60 * 1000, // 1 hari
       });
 
 
