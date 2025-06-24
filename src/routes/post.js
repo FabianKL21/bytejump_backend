@@ -9,6 +9,7 @@ const {
   getPostNewest,
 } = require("../controllers/post");
 const upload = require("../middlewares/upload");
+const checkLogin = require("../middlewares/checkLogin");
 const router = express.Router();
 
 router.post("/", [upload.single("post_banner")], addPost);

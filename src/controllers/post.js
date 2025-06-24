@@ -88,8 +88,6 @@ const updatePost = async (req, res) => {
       );
 
       url = uploaded.webViewLink;
-
-      fs.unlinkSync(filePath);
     }
 
     const result = await prisma.post.update({

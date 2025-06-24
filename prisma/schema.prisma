@@ -18,8 +18,8 @@ model User {
   user_password      String
   user_nama          String
   user_avatar        String
-  user_refresh_token String
-  user_balance       Float          @default(0)
+  user_refresh_token String?
+  user_balance       Int            @default(0)
   user_role          Role           @default(member)
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
