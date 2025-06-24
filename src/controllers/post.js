@@ -155,7 +155,9 @@ const getPosts = async (req, res) => {
       .status(200)
       .json({ message: "Success Get Posts", result: result });
   } catch (error) {
-    return res.status(500).json({ message: "Failed to Get Post" });
+    return res
+      .status(500)
+      .json({ message: "Failed to Get Post", error: error });
   }
 };
 const getPostsByTitle = async (req, res) => {

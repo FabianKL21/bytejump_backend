@@ -5,8 +5,8 @@ const chat = async (req, res) => {
     const client = new InferenceClient(process.env.HF_ACCESS_TOKEN);
     const { input } = req.body;
     const response = await client.chatCompletion({
-      provider: "featherless-ai",
-      model: "Qwen/Qwen2.5-7B-Instruct-1M",
+      provider: "groq",
+      model: "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
       messages: [
         {
           role: "user",
@@ -20,6 +20,8 @@ const chat = async (req, res) => {
       result: response.choices[0].message.content,
     });
   } catch (error) {
+    console.log(error);
+
     return res.status(500).json({ message: "Failed to generate" });
   }
 };
