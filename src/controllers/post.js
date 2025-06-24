@@ -8,20 +8,18 @@ const addPost = async (req, res) => {
       req.body;
     let url = "";
     if (req.file) {
-      const filePath = req.file.path;
+      const buffer = req.file.buffer;
       const fileName = req.file.originalname;
       const mimeType = req.file.mimetype;
 
       const uploaded = await uploadFile(
-        filePath,
+        buffer,
         fileName,
         mimeType,
         GOOGLE_DRIVE_FOLDER_ID
       );
 
       url = uploaded.webViewLink;
-
-      fs.unlinkSync(filePath);
     }
     const result = await prisma.post.create({
       data: {
@@ -38,6 +36,8 @@ const addPost = async (req, res) => {
       .status(201)
       .json({ message: "Success Create Post", result: result });
   } catch (error) {
+    console.log(error);
+
     return res.status(500).json({ message: "Failed To Add Post" });
   }
 };
@@ -76,12 +76,12 @@ const updatePost = async (req, res) => {
     let url = post.post_banner;
 
     if (req.file) {
-      const filePath = req.file.path;
+      const buffer = req.file.buffer;
       const fileName = req.file.originalname;
       const mimeType = req.file.mimetype;
 
       const uploaded = await uploadFile(
-        filePath,
+        buffer,
         fileName,
         mimeType,
         GOOGLE_DRIVE_FOLDER_ID

@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const { google } = require("googleapis");
+const streamifier = require("streamifier");
 
 const SCOPES = ["https://www.googleapis.com/auth/drive"];
 const auth = new google.auth.GoogleAuth({
@@ -13,7 +14,7 @@ const drive = google.drive({
   auth,
 });
 
-const uploadFile = async (filePath, fileName, mimeType, folderId) => {
+const uploadFile = async (buffer, fileName, mimeType, folderId) => {
   const fileMetadata = {
     name: fileName,
     parents: [folderId],
@@ -21,7 +22,7 @@ const uploadFile = async (filePath, fileName, mimeType, folderId) => {
 
   const media = {
     mimeType: mimeType,
-    body: fs.createReadStream(filePath),
+    body: streamifier.createReadStream(buffer),
   };
 
   const response = await drive.files.create({
