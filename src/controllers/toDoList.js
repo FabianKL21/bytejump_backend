@@ -17,6 +17,7 @@ const addToDoList = async (req, res) => {
       .status(201)
       .json({ message: "Success Add Task", result: result });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Failed To Add Task" });
   }
 };
@@ -39,7 +40,10 @@ const updateToDoList = async (req, res) => {
     } else {
       updatedTask = await prisma.todolist.update({
         where: { id: id },
-        data: { todolist_status: "Process", todolist_worker: "admin" },
+        data: {
+          todolist_status: "Process",
+          todolist_worker: req.userLogin.user_nama,
+        },
       });
     }
 

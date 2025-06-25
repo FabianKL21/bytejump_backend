@@ -67,7 +67,7 @@ model todolist {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   todolist_desc   String
   todolist_status String
-  todolist_worker String
+  todolist_worker String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   deletedAt       DateTime?
