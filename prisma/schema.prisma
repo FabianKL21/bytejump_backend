@@ -55,7 +55,7 @@ type Transaction {
   trans_recipe String
   trans_date   DateTime
   trans_total  Int
-  trans_detail DTransaction[]
+  trans_detail DTransaction
 }
 
 type DTransaction {
