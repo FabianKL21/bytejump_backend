@@ -1,9 +1,18 @@
 const { InferenceClient } = require("@huggingface/inference");
+const prisma = require("../../prisma/prisma");
 
 const chat = async (req, res) => {
   try {
     const client = new InferenceClient(process.env.HF_ACCESS_TOKEN);
     const { input } = req.body;
+    const user = req.userLogin;
+    await prisma.chat.create({
+      data: {
+        userId: user.id,
+        role: "user",
+        message: input,
+      },
+    });
     const response = await client.chatCompletion({
       provider: "groq",
       model: "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
@@ -13,6 +22,13 @@ const chat = async (req, res) => {
           content: input,
         },
       ],
+    });
+    await prisma.chat.create({
+      data: {
+        userId: user.id,
+        role: "ai",
+        message: response.choices[0].message.content,
+      },
     });
 
     return res.status(200).json({

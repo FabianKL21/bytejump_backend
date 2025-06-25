@@ -10,5 +10,5 @@ const router = express.Router();
 
 router.put("/personal", [checkLogin], updatePersonalData);
 router.put("/profpic", [checkLogin, upload.single("profpic")], updateProfpic);
-router.post("/topup", topup);
+router.post("/topup", [checkLogin], topup);
 module.exports = router;

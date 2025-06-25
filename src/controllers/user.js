@@ -140,9 +140,10 @@ const updateProfpic = async (req, res) => {
 
 const topup = async (req, res) => {
   try {
+    const {} = req.body;
     return res.status(200).json({ message: "hahaha" });
   } catch (error) {
-    return res.status(500).json({ message: "hahahaha" });
+    return res.status(500).json({ message: "Top Up Failed Server Error" });
   }
 };
 
