@@ -6,6 +6,7 @@ const {
   toDoListrouter,
   authRouter,
   userRouter,
+  forumRouter,
 } = require("./src/routes");
 const cookieParser = require("cookie-parser");
 const app = express();
@@ -28,5 +29,6 @@ app.use("/api/v1/articles", articlesRouter);
 app.use("/api/v1/post", postRouter);
 app.use("/api/v1/todolist", toDoListrouter);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/forum", forumRouter);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

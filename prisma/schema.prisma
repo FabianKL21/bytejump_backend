@@ -103,5 +103,4 @@ type ForumReply {
   username String
   date     DateTime
   reply    String
-  replies  ForumReply[]
 }
