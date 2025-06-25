@@ -71,6 +71,7 @@ const login = async (req, res) => {
         user_nama: true,
         user_role: true,
         user_avatar: true,
+        user_balance: true,
       },
     });
 
@@ -113,11 +114,10 @@ const login = async (req, res) => {
       //setel ini pas localan
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: false,        // JANGAN true dulu, karena http://localhost akan gagal
-        sameSite: "lax",      //  "lax" cukup untuk localhost & masih oke di deploy
+        secure: false, // JANGAN true dulu, karena http://localhost akan gagal
+        sameSite: "lax", //  "lax" cukup untuk localhost & masih oke di deploy
         maxAge: 24 * 60 * 60 * 1000, // 1 hari
       });
-
 
       return res
         .status(200)

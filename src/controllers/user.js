@@ -33,6 +33,7 @@ const updatePersonalData = async (req, res) => {
         user_nama: true,
         user_role: true,
         user_avatar: true,
+        user_balance: true,
       },
     });
 
@@ -50,9 +51,15 @@ const updatePersonalData = async (req, res) => {
         user_refresh_token: refreshToken,
       },
     });
+    // res.cookie("refreshToken", refreshToken, {
+    //   httpOnly: true,
+    //   maxAge: 24 * 60 * 60 * 1000,
+    // });
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      secure: false, // JANGAN true dulu, karena http://localhost akan gagal
+      sameSite: "lax", //  "lax" cukup untuk localhost & masih oke di deploy
+      maxAge: 24 * 60 * 60 * 1000, // 1 hari
     });
 
     return res.status(200).json({
@@ -92,6 +99,7 @@ const updateProfpic = async (req, res) => {
         user_nama: true,
         user_role: true,
         user_avatar: true,
+        user_balance: true,
       },
     });
 
@@ -109,9 +117,16 @@ const updateProfpic = async (req, res) => {
         user_refresh_token: refreshToken,
       },
     });
+    // res.cookie("refreshToken", refreshToken, {
+    //   httpOnly: true,
+    //   maxAge: 24 * 60 * 60 * 1000,
+    // });
+
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      secure: false, // JANGAN true dulu, karena http://localhost akan gagal
+      sameSite: "lax", //  "lax" cukup untuk localhost & masih oke di deploy
+      maxAge: 24 * 60 * 60 * 1000, // 1 hari
     });
 
     return res.status(200).json({
