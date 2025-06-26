@@ -161,10 +161,14 @@ const deleteForum = async (req, res) => {
 
 const getAllForum = async (req, res) => {
   try {
-    const result = await prisma.forum.findMany({ where: { deletedAt: null } });
+    const result = await prisma.forum.findMany();
+    const resultFilter = result.filter((item) => {
+      return item.deletedAt === null || item.deletedAt === undefined;
+    });
+
     return res
       .status(200)
-      .json({ message: "success get all forum", result: result });
+      .json({ message: "success get all forum", result: resultFilter });
   } catch (error) {
     return res.status(500).json({ message: "Failed to get data" });
   }
