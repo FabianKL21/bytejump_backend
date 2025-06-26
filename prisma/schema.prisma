@@ -55,12 +55,7 @@ type Transaction {
   trans_recipe String
   trans_date   DateTime
   trans_total  Int
-  trans_detail DTransaction
-}
-
-type DTransaction {
-  detail_name  String
-  detail_price Int
+  trans_detail String
 }
 
 model todolist {

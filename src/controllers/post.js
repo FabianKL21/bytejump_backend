@@ -4,8 +4,8 @@ const fs = require("fs");
 const GOOGLE_DRIVE_FOLDER_ID = process.env.GDRIVEKEY;
 const addPost = async (req, res) => {
   try {
-    const { post_title, post_author, post_short_desc, post_long_desc } =
-      req.body;
+    const user = req.userLogin;
+    const { post_title, post_short_desc, post_long_desc } = req.body;
     let url = "";
     if (req.file) {
       const buffer = req.file.buffer;
@@ -24,7 +24,7 @@ const addPost = async (req, res) => {
     const result = await prisma.post.create({
       data: {
         post_title,
-        post_author,
+        post_author: user.user_nama,
         post_short_desc,
         post_long_desc,
         post_banner: url,
@@ -64,8 +64,7 @@ const deletePost = async (req, res) => {
 const updatePost = async (req, res) => {
   try {
     const { id } = req.params;
-    const { post_title, post_author, post_short_desc, post_long_desc } =
-      req.body;
+    const { post_title, post_short_desc, post_long_desc } = req.body;
     const post = await prisma.post.findFirst({
       where: { id: id, deletedAt: null },
     });
@@ -94,7 +93,6 @@ const updatePost = async (req, res) => {
       where: { id: id },
       data: {
         post_title: post_title || post.post_title,
-        post_author: post_author || post.post_author,
         post_short_desc: post_short_desc || post.post_short_desc,
         post_long_desc: post_long_desc || post.post_long_desc,
         post_banner: url,

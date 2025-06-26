@@ -1,4 +1,5 @@
 const prisma = require("../../prisma/prisma");
+const { v4: uuidv4 } = require("uuid");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { uploadFile } = require("../utils/googleDrive");
@@ -25,7 +26,7 @@ const updatePersonalData = async (req, res) => {
       data: {
         user_email: user_email || user.user_email,
         user_password: hashPassword || user.user_password,
-        user_nama: user_nama || user_nama,
+        user_nama: user_nama || user.user_nama,
       },
       select: {
         id: true,
@@ -140,9 +141,68 @@ const updateProfpic = async (req, res) => {
 
 const topup = async (req, res) => {
   try {
-    const {} = req.body;
-    return res.status(200).json({ message: "hahaha" });
+    const user = req.userLogin;
+
+    const found = await prisma.user.findFirst({ where: { id: user.id } });
+
+    if (!found) {
+      return res.status(404).json({ message: "user not found" });
+    }
+    const { trans_detail, trans_total, tambahPoin } = req.body;
+    const date = new Date();
+    const newTransaction = {
+      trans_recipe: uuidv4(),
+      trans_detail: trans_detail,
+      trans_total: parseInt(trans_total),
+      trans_date: date,
+    };
+
+    const result = await prisma.user.update({
+      where: { id: found.id },
+      data: {
+        user_balance: { increment: parseInt(tambahPoin) },
+        user_transaction: { push: newTransaction },
+      },
+      select: {
+        id: true,
+        user_email: true,
+        user_nama: true,
+        user_role: true,
+        user_avatar: true,
+        user_balance: true,
+      },
+    });
+
+    const accessToken = jwt.sign(result, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "6h",
+    });
+
+    const refreshToken = jwt.sign(result, process.env.REFRESH_TOKEN_SECRET, {
+      expiresIn: "24h",
+    });
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        user_refresh_token: refreshToken,
+      },
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false, // JANGAN true dulu, karena http://localhost akan gagal
+      sameSite: "lax", //  "lax" cukup untuk localhost & masih oke di deploy
+      maxAge: 24 * 60 * 60 * 1000, // 1 hari
+    });
+
+    return res.status(200).json({
+      message: "your payment success",
+      result: result,
+      accessToken: accessToken,
+    });
   } catch (error) {
+    console.log(error);
+
     return res.status(500).json({ message: "Top Up Failed Server Error" });
   }
 };
