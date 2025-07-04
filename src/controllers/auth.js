@@ -111,14 +111,13 @@ const login = async (req, res) => {
       //   maxAge: 24 * 60 * 60 * 1000
       // });
 
-      //setel ini pas localan
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: false, // JANGAN true dulu, karena http://localhost akan gagal
-        sameSite: none, //  "lax" cukup untuk localhost & masih oke di deploy
-        maxAge: 24 * 60 * 60 * 1000, // 1 hari,
-        
+        secure: true,          
+        sameSite: "None",      
+        maxAge: 24 * 60 * 60 * 1000
       });
+
 
       return res
         .status(200)
@@ -142,7 +141,7 @@ const refreshToken = async (req, res) => {
     const user = await prisma.user.findFirst({
       where: { user_refresh_token: cookies.refreshToken },
       select: {
-        id: true,   
+        id: true,
         user_email: true,
         user_nama: true,
         user_role: true,
