@@ -17,10 +17,9 @@ app.use(
   cors({
     origin: ["http://localhost:5173", "https://bytejump.vercel.app"],
     credentials: true,
+    
   })
 );
-res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173'); // domain frontend
-res.setHeader('Access-Control-Allow-Credentials', 'true');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("dotenv").config();
