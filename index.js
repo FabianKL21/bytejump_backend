@@ -19,6 +19,8 @@ app.use(
     credentials: true,
   })
 );
+res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173'); // domain frontend
+res.setHeader('Access-Control-Allow-Credentials', 'true');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("dotenv").config();
