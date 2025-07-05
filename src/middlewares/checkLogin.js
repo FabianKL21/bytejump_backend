@@ -2,12 +2,18 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const checkLogin = (req, res, next) => {
-  const authHeader = req.headers.authorization || req.headers.Authorization;
-  if (!authHeader?.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Header Not Found" });
-  }
+  // const authHeader = req.headers.authorization || req.headers.Authorization;
+  
+  const authHeader = req.cookies
 
-  const accessToken = authHeader.split(" ")[1];
+  if (!authHeader) {
+    return res.status(401).json({ message: "cookies ga ketemu njing" });
+  }
+  // if (!authHeader?.startsWith("Bearer ")) {
+  //   return res.status(401).json({ message: "Header Not Found" });
+  // }
+//  const accessToken = authHeader.split(" ")[1]
+  const accessToken = authHeader;
 
   jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
