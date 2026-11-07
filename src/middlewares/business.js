@@ -19,7 +19,7 @@ const checkBalanceGambar = (req, res, next) => {
   }
 
   const user = req.userLogin;
-  if (user.user_balance < 70) {
+  if (user.user_balance < 75) {
     return res.status(402).json({ message: "Your Balance is Lacking" });
   }
   next();
